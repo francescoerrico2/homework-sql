@@ -41,11 +41,16 @@ admin' OR '1'='1
 ```
 
 **Commento di Fine Riga:**
-Esempio di input: admin'; --
+Esempio di input: 
+```bash 
+admin'; -- 
+```
 
 **Query Piggybacked:**
-Esempio di input: admin'; DROP TABLE users; --
-
+Esempio di input: 
+```bash 
+admin'; DROP TABLE users; --
+```
 ## Compromissione delle Proprietà CIA
 Utilizzando questi attacchi, è possibile compromettere:
 
