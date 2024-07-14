@@ -5,7 +5,7 @@
 Questo progetto dimostra un attacco di SQL Injection di tipo inband su un'applicazione web vulnerabile, utilizzando Docker per configurare l'ambiente.
 
 ## Struttura del Progetto
-
+```bash
 /homework-sqli
 ├── docker-compose.yml
 ├── Dockerfile
@@ -13,7 +13,7 @@ Questo progetto dimostra un attacco di SQL Injection di tipo inband su un'applic
 ├── logout.php
 ├── login.php
 └── welcome.php
-
+```
 ## Requisiti
 
 - **Docker** e **Docker Compose** installati
@@ -35,7 +35,10 @@ docker-compose up --build
 
 ## Tipi di Attacco
 **Tautologia:**
-Esempio di input: admin' OR '1'='1
+Esempio di input: 
+```bash 
+admin' OR '1'='1
+```
 
 **Commento di Fine Riga:**
 Esempio di input: admin'; --
