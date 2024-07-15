@@ -1,3 +1,4 @@
+
 version: '3.1'
 
 services:
@@ -16,6 +17,16 @@ services:
   apache:
     build: .
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - db
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ""

@@ -55,6 +55,7 @@ admin'; DROP TABLE users; --
 Utilizzando questi attacchi, è possibile compromettere:
 
 **Confidenzialità:** Accesso non autorizzato ai dati.
+
 **Integrità:** Modifica o eliminazione di dati nel database.
 
 ## Avvio e Arresto del Progetto
