@@ -1,9 +1,12 @@
+FROM php:7.2-apache
+RUN apt-get update -y
 
-FROM php:5.6-apache
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+RUN a2enmod rewrite
 
-RUN docker-php-ext-install mysqli
+# Add correct rights for www folder.
+RUN chown -R www-data:www-data /var/www/
 
-COPY ./login.php /var/www/html/
-COPY ./welcome.php /var/www/html/
-COPY ./init.sql /docker-entrypoint-initdb.d/
-COPY ./logout.php /var/www/html/
+# Install and enable xdebug.
+
+COPY . /var/www/html/

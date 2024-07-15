@@ -18,7 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputPassword = $_POST['password'];
 
     // Query vulnerabile
-    $sql= "SELECT id, username FROM users WHERE username = '$inputUsername' and password = '$inputPassword'";
+    $sql = "SELECT id, username FROM users WHERE username = '$inputUsername' and password = '$inputPassword'";
+    
+    // Log the SQL query for debugging
+    error_log("Executing SQL: $sql");
+    
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0) {
@@ -28,7 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $message = "Credenziali non valide. Riprova.";
     }
+
+    // Verifica se la tabella users esiste ancora
+    $checkTableSql = "SHOW TABLES LIKE 'users'";
+    $checkResult = $conn->query($checkTableSql);
+
+    if ($checkResult && $checkResult->num_rows == 0) {
+        $message = "La tabella 'users' è stata cancellata!";
+    }
 }
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -49,10 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         .container {
             background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            padding: 50px;
+            border-radius: 0px;
+            box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+            width: 300px;justify-content: center;
+            align-items: center;
         }
         h2 {
             text-align: center;
@@ -63,10 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 6px;
         }
         input[type="submit"] {
-            background-color: #5cb85c;
+            background-color: #0000FF;
             color: white;
             padding: 10px;
             border: none;
@@ -74,12 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
         }
         input[type="submit"]:hover {
-            background-color: #4cae4c;
+            background-color: #539fec;
         }
         .message {
             color: red;
             text-align: center;
         }
+    
     </style>
 </head>
 <body>

@@ -31,7 +31,8 @@ Questo progetto dimostra un attacco di SQL Injection di tipo inband su un'applic
 docker-compose up --build
 ```
 
-4. **Accedi all'applicazione web aprendo il browser e navigando su http://localhost:80/login.php.**
+4. **Accedi all'applicazione web aprendo il browser e navigando su http://localhost:8080/login.php.**
+5. **Accedi all'applicazione phpmyadmin aprendo il browser e navigando su http://localhost:8888/.**
 
 ## Tipi di Attacco
 **Tautologia:**
