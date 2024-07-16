@@ -6,31 +6,42 @@ $username = "root";
 $password = "";
 $database = "vulnerable_db";
 
+// Connessione al database
 $conn = new mysqli($servername, $username, $password, $database);
 
+// Controllo della connessione
 if ($conn->connect_error) {
     die("Connessione fallita: " . $conn->connect_error);
 }
+
+// Abilitare multi_query per consentire query multiple
+$conn->multi_query = true;
 
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputUsername = $_POST['username'];
     $inputPassword = $_POST['password'];
 
-    // Query vulnerabile
-    $sql = "SELECT id, username FROM users WHERE username = '$inputUsername' and password = '$inputPassword'";
-    
-    // Log the SQL query for debugging
-    error_log("Executing SQL: $sql");
-    
-    $result = $conn->query($sql);
+    // Query vulnerabile con la concatenazione diretta di input non sanitizzato
+    $sql = "SELECT id, username FROM users WHERE username = '$inputUsername' AND password = '$inputPassword';";
 
-    if ($result && $result->num_rows > 0) {
-        $_SESSION['username'] = $inputUsername;
-        header("Location: welcome.php");
-        exit();
+    // Esecuzione della query
+    if ($conn->multi_query($sql)) {
+        do {
+            // Store the first result set
+            if ($result = $conn->store_result()) {
+                if ($result->num_rows > 0) {
+                    $_SESSION['username'] = $inputUsername;
+                    header("Location: welcome.php");
+                    exit();
+                } else {
+                    $message = "Credenziali non valide. Riprova.";
+                }
+                $result->free();
+            }
+        } while ($conn->more_results() && $conn->next_result());
     } else {
-        $message = "Credenziali non valide. Riprova.";
+        $message = "Errore nell'esecuzione della query: " . $conn->error;
     }
 
     // Verifica se la tabella users esiste ancora
@@ -52,7 +63,6 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -64,39 +74,41 @@ $conn->close();
         }
         .container {
             background: white;
-            padding: 50px;
-            border-radius: 0px;
-            box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
-            width: 300px;justify-content: center;
-            align-items: center;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px; 
+            margin: 0 20px; 
         }
         h2 {
             text-align: center;
         }
         input[type="text"],
         input[type="password"] {
-            width: 100%;
+            width: calc(100% - 15%); 
             padding: 10px;
-            margin: 10px 0;
+            margin: 10px 10px; 
             border: 1px solid #ccc;
-            border-radius: 6px;
+            border-radius: 4px;
         }
         input[type="submit"] {
-            background-color: #0000FF;
+            background-color: #007bff;
             color: white;
             padding: 10px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin: 10px 6px; 
+            width: calc(100% - 5%);  
         }
         input[type="submit"]:hover {
-            background-color: #539fec;
+            background-color: #0056b3; 
         }
         .message {
             color: red;
             text-align: center;
         }
-    
     </style>
 </head>
 <body>
